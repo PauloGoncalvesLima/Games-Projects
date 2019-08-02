@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\charController\charMoviment.cs" />
+    <Compile Include="Assets\Scripts\LightController\LightMoviment.cs" />
     <Compile Include="Assets\Scripts\sceneController\sceneController.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/paulo/Documents/GMTK_2019/gmtk2019/GMTK2019/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

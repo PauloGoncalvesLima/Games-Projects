@@ -5,10 +5,16 @@ using UnityEngine;
 
 public class sceneController : MonoBehaviour
 {
+    private void Awake()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-   
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1, LoadSceneMode.Single);
-
+        if (collision.gameObject.tag.Equals("Char"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1, LoadSceneMode.Single);
+        }
     }
 }
