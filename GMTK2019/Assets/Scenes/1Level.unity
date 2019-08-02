@@ -507,6 +507,7 @@ GameObject:
   - component: {fileID: 1332637273}
   - component: {fileID: 1332637269}
   - component: {fileID: 1332637272}
+  - component: {fileID: 1332637274}
   m_Layer: 0
   m_Name: Character_temp
   m_TagString: Char
@@ -662,6 +663,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocity: 0
+--- !u!95 &1332637274
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1332637268}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 71907475e70889042ae6d8d186586a27, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1449908777
 GameObject:
   m_ObjectHideFlags: 0
