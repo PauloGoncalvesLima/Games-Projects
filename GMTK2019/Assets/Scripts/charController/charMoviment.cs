@@ -20,5 +20,10 @@ public class charMoviment : MonoBehaviour
         {
             this.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(velocity, 0);
         }
+        else
+        {
+            this.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(-velocity+1, 0);
+        }
+
     }
 }
