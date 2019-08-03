@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class misController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        
+        Debug.Log("ASAD");
+        if (collision.gameObject.tag.Equals("Dis"))
+        {
+            transform.GetComponent<BoxCollider2D>().isTrigger = false;
+        }
     }
-
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        
+        if (collision.gameObject.tag.Equals("Dis"))
+        {
+            transform.GetComponent<BoxCollider2D>().isTrigger = true;
+        }
     }
 }

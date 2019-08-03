@@ -10,6 +10,8 @@ TagManager:
   - Center
   - Dir
   - Coner
+  - Dis
+  - MisBlock
   layers:
   - Default
   - TransparentFX

@@ -5,6 +5,7 @@ using UnityEngine;
 public class charMoviment : MonoBehaviour
 {
     public float velocity;
+    public float velocityY;
     Rigidbody2D Char;
     Animator animDark;
     Animator animLight;
@@ -16,11 +17,13 @@ public class charMoviment : MonoBehaviour
         animLight = transform.GetChild(1).GetComponent<Animator>();
         Char = gameObject.GetComponent<Rigidbody2D>();
         velocity = 0f;
+        Char.gravityScale = velocityY;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        Char.gravityScale = velocityY;
         Char.velocity = new Vector2(velocity, 0);
         if (velocity == 0)
         {
