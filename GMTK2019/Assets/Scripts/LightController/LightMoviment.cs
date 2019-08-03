@@ -15,8 +15,22 @@ public class LightMoviment : MonoBehaviour
 
     private void FixedUpdate()
     {
+
         if (mouseDown)
         {
+            if(transform.GetComponent<Rigidbody2D>().rotation <= -60 || transform.GetComponent<Rigidbody2D>().rotation >= 60)
+            {
+                mouseDown = false;
+                transform.GetComponent<Rigidbody2D>().gravityScale = 1;
+                if (transform.GetComponent<Rigidbody2D>().angularVelocity >= 100)
+                {
+                    transform.GetComponent<Rigidbody2D>().angularVelocity = 100f;
+                }
+                else if (transform.GetComponent<Rigidbody2D>().angularVelocity <= -100)
+                {
+                    transform.GetComponent<Rigidbody2D>().angularVelocity = -100f;
+                }
+            }
             mPos = Input.mousePosition;
             mPos = Camera.main.ScreenToWorldPoint(mPos);
 
@@ -35,29 +49,23 @@ public class LightMoviment : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             mouseDown = true;
+            transform.GetComponent<Rigidbody2D>().gravityScale = 0;
+            
         }
     }
 
     private void OnMouseUp()
     {
         mouseDown = false;
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag.Equals("Char"))
+        transform.GetComponent<Rigidbody2D>().gravityScale = 1;
+        if (transform.GetComponent<Rigidbody2D>().angularVelocity >= 100)
         {
-            charMoviment.hasLight = true;
-        }
-   
-    }
-
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag.Equals("Char"))
+            transform.GetComponent<Rigidbody2D>().angularVelocity = 100f;
+        }else if(transform.GetComponent<Rigidbody2D>().angularVelocity <= -100)
         {
-            charMoviment.hasLight = false;
+            transform.GetComponent<Rigidbody2D>().angularVelocity = -100f;
         }
+        
     }
 
 }

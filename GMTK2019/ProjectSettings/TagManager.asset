@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Char
   - Wall
+  - Light
+  - Center
+  - Dir
+  - Coner
   layers:
   - Default
   - TransparentFX
