@@ -8,10 +8,10 @@ TagManager:
   - Wall
   - Light
   - Center
-  - Dir
   - Coner
   - Dis
   - MisBlock
+  - Death
   layers:
   - Default
   - TransparentFX
