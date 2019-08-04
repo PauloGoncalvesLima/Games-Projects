@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class crusherController : MonoBehaviour
 {
-    bool isCrushed;
+    public bool isCrushed;
     public float speed;
     public float size;
     
