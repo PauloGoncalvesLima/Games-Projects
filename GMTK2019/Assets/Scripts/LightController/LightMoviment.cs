@@ -18,7 +18,7 @@ public class LightMoviment : MonoBehaviour
 
         if (mouseDown)
         {
-            if(transform.GetComponent<Rigidbody2D>().rotation <= -60 || transform.GetComponent<Rigidbody2D>().rotation >= 60)
+            if(transform.GetComponent<Rigidbody2D>().rotation <= -65 || transform.GetComponent<Rigidbody2D>().rotation >= 65)
             {
                 mouseDown = false;
                 transform.GetComponent<Rigidbody2D>().gravityScale = 1;

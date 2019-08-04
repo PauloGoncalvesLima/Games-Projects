@@ -7,7 +7,6 @@ public class misController : MonoBehaviour
     
     private void OnTriggerStay2D(Collider2D collision)
     {
-        Debug.Log("ASAD");
         if (collision.gameObject.tag.Equals("Dis"))
         {
             transform.GetComponent<BoxCollider2D>().isTrigger = false;

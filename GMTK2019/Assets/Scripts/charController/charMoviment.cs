@@ -64,6 +64,7 @@ public class charMoviment : MonoBehaviour
     void FixedUpdate()
     {
         Char.velocity = new Vector2(velocity, Char.velocity.y);
+
         if (velocity == 0)
         {
             animDark.SetBool("isStill", true);
@@ -87,7 +88,7 @@ public class charMoviment : MonoBehaviour
         }
 
         // check if falling
-        if (Char.velocity.y < 0f)
+        if (Char.velocity.y < -0.5f)
         {
             if (animDark.GetBool("isFalling") == false)
             {
@@ -112,7 +113,7 @@ public class charMoviment : MonoBehaviour
             if (stage == 0)
             {
                 animDark.SetBool("isStill", false);
-                //animLight.SetBool("isStill", false);
+                animLight.SetBool("isStill", false);
                 velocity = 0;
                 t += Time.deltaTime / 2;
 
@@ -127,7 +128,7 @@ public class charMoviment : MonoBehaviour
             else if (stage == 1)
             {
                 animDark.SetBool("isClimbing", true);
-                //animLight.SetBool("isClimbing", true);
+                animLight.SetBool("isClimbing", true);
                 velocity = 0;
                 Char.gravityScale = 0f;
                 t += Time.deltaTime/75;
@@ -141,7 +142,7 @@ public class charMoviment : MonoBehaviour
                     charCenter = transform.position.x;
                     xPos = transform.position.x;
                     animDark.SetBool("isClimbing", false);
-                    //animLight.SetBool("isClimbing", false);
+                    animLight.SetBool("isClimbing", false);
                 }
             }
             else if (stage == 2)
@@ -156,7 +157,7 @@ public class charMoviment : MonoBehaviour
                     isEnt = false;
                     Char.gravityScale = velocityY;
                     animDark.SetBool("isStill", true);
-                    //animLight.SetBool("isStill", true);
+                    animLight.SetBool("isStill", true);
                 }
             }
 
@@ -174,6 +175,21 @@ public class charMoviment : MonoBehaviour
        
     }
 
+    public void DieFear()
+    {
+        if (life == true)
+        {
+            velocity = 0;
+            Char.gravityScale = 0;
+            gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+            animDark.SetBool("isDyingFear", true);
+            animLight.SetBool("isDyingFear", true);
+            life = false;
+            isScared = true;
+            this.enabled = false;
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag.Equals("Death"))
@@ -185,7 +201,7 @@ public class charMoviment : MonoBehaviour
                 Char.gravityScale = 0;
                 gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
                 animDark.SetBool("isSquish", true);
-                //animLight.SetBool("isSquish", true);
+                animLight.SetBool("isSquish", true);
                 life = false;
                 this.enabled = false;
             }
@@ -197,6 +213,16 @@ public class charMoviment : MonoBehaviour
             velocity = 0;
             stair = collision.GetComponent<BoxCollider2D>();
             direction = collision.gameObject.GetComponent<stairDirection>().direction;
+        }
+        if (collision.gameObject.tag.Equals("Porta"))
+        {
+            velocity = 0;
+            animDark.SetBool("Win", true);
+            animLight.SetBool("Win", true);
+        }
+        if (collision.gameObject.tag.Equals("misSound"))
+        {
+            collision.gameObject.GetComponent<AudioSource>().Play();
         }
     }
 

@@ -13,6 +13,8 @@ public class fearBar : MonoBehaviour
     public Color tmp;
     public Color startColor;
     public Color endColor;
+
+    bool isDead;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +25,7 @@ public class fearBar : MonoBehaviour
         controler = -3.5f;
          
         Char = GameObject.Find("Character");
+        isDead = false;
     }
 
     // Update is called once per frame
@@ -44,6 +47,12 @@ public class fearBar : MonoBehaviour
         if (transform.localScale.x >= size)
         {
             transform.localScale = new Vector3 (size, transform.localScale.y, transform.localScale.z);
+            // die
+            if (!isDead)
+            {
+                Char.GetComponent<charMoviment>().DieFear();
+                isDead = true;
+            } 
         }
         else if (transform.localScale.x <= 0)
         {

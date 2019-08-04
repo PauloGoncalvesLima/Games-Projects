@@ -7,6 +7,8 @@ public class crusherController : MonoBehaviour
     public bool isCrushed;
     public float speed;
     public float size;
+
+    AudioSource source;
     
     // Start is called before the first frame update
     void Start()
@@ -14,6 +16,8 @@ public class crusherController : MonoBehaviour
         isCrushed = false;
         speed = 10f;
         size = 8f;
+
+        source = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -35,6 +39,7 @@ public class crusherController : MonoBehaviour
             if (transform.localScale.y > size)
             {
                 isCrushed = true;
+                source.Play();
             }
         }
     }

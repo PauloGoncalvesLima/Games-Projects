@@ -8,6 +8,7 @@ public class CharRun : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.gameObject.GetComponentInParent<charMoviment>().velocity = -2.5f;
+        animator.gameObject.GetComponent<SpriteRenderer>().flipX = true;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
