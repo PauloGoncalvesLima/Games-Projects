@@ -12,6 +12,8 @@ TagManager:
   - Dis
   - MisBlock
   - Death
+  - ConerD
+  - Escada
   layers:
   - Default
   - TransparentFX
