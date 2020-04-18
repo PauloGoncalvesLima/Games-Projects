@@ -5,18 +5,25 @@ public class PlayerController : MonoBehaviour {
 
     public float speed = 8.5f;
     private bool onLadder;
+    private bool canInteract;
 
     private Rigidbody2D rb;
+    private DialogueManager dm;
 
     private void Awake() {
         // fetch components
         rb = GetComponent<Rigidbody2D>();
-        
+        dm = GetComponentInChildren<DialogueManager>();
         // initial properties
         onLadder = false;
+        canInteract = false;
     }
 
     private void FixedUpdate() {
+        handleMovement();
+    }
+
+    private void handleMovement() {
         float hVelocity = Input.GetAxisRaw("Horizontal") * speed;
         float vVelocity = rb.velocity.y;
 
@@ -28,16 +35,37 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.tag == "Ladder") {
-            onLadder = true;
-            rb.gravityScale = 0;
+        switch (other.gameObject.tag) {
+            case "Ladder":
+                onLadder = true;
+                rb.gravityScale = 0;
+                break;
+            case "Event":
+                dm.showInteract();
+                break;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other) {
+        switch (other.gameObject.tag) {
+            case "Event":
+                if (Input.GetKeyDown("e")) {
+                    StartCoroutine(dm.startDialogue(other.gameObject.name));
+                    Destroy(other.gameObject);
+                }
+                break;
         }
     }
 
     private void OnTriggerExit2D(Collider2D other) {
-        if (other.gameObject.tag == "Ladder") {
-            onLadder = false;
-            rb.gravityScale = 2;
+        switch (other.gameObject.tag) {
+            case "Ladder":
+                onLadder = false;
+                rb.gravityScale = 2;
+                break;
+            case "Event":
+                dm.hideInteract();
+                break;
         }
     }
 }

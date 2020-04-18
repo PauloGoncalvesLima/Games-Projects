@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ladder
   - MovableBox
+  - Event
   layers:
   - Default
   - TransparentFX
