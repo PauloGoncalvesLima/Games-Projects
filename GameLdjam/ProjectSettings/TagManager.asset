@@ -44,3 +44,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Lights
+    uniqueID: 2175775335
+    locked: 0
+  - name: Foreground LV10
+    uniqueID: 2036101957
+    locked: 0

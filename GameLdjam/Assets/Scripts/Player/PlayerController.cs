@@ -4,12 +4,13 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
     public float speed = 8.5f;
+    public float Gr;
     private bool onLadder;
     private bool canInteract;
-
+    private bool ePress;
     private Rigidbody2D rb;
     private DialogueManager dm;
-
+    
     private void Awake() {
         // fetch components
         rb = GetComponent<Rigidbody2D>();
@@ -17,10 +18,23 @@ public class PlayerController : MonoBehaviour {
         // initial properties
         onLadder = false;
         canInteract = false;
+        ePress = false;
     }
 
     private void FixedUpdate() {
         handleMovement();
+    }
+
+    /// <summary>
+    /// Update is called every frame, if the MonoBehaviour is enabled.
+    /// </summary>
+    void Update()
+    {
+        if(Input.GetKeyDown("e")){
+            ePress = true;
+        } else if (Input.GetKeyUp("e")){
+            ePress = false;
+        }
     }
 
     private void handleMovement() {
@@ -32,6 +46,11 @@ public class PlayerController : MonoBehaviour {
         }
 
         rb.velocity = new Vector2(hVelocity, vVelocity);
+        if(rb.velocity.x < -0.5 ){
+            this.GetComponent<SpriteRenderer>().flipX = true;
+        } else if (rb.velocity.x > 0.5) {
+            this.GetComponent<SpriteRenderer>().flipX = false;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
@@ -49,7 +68,7 @@ public class PlayerController : MonoBehaviour {
     private void OnTriggerStay2D(Collider2D other) {
         switch (other.gameObject.tag) {
             case "Event":
-                if (Input.GetKeyDown("e")) {
+                if (ePress) {
                     StartCoroutine(dm.startDialogue(other.gameObject.name));
                     Destroy(other.gameObject);
                 }
@@ -61,7 +80,7 @@ public class PlayerController : MonoBehaviour {
         switch (other.gameObject.tag) {
             case "Ladder":
                 onLadder = false;
-                rb.gravityScale = 2;
+                rb.gravityScale = Gr;
                 break;
             case "Event":
                 dm.hideInteract();
