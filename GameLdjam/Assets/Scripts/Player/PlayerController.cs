@@ -4,7 +4,8 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
     public float speed = 8.5f;
-    public float Gr;
+    public float Grav;
+    public GameObject Pause;
     private bool onLadder;
     private bool canInteract;
     private bool ePress;
@@ -24,7 +25,10 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        handleMovement();
+        if(!Pause.GetComponent<Pause>().isPaused){
+            handleMovement();
+        }
+        
     }
 
     /// <summary>
@@ -92,7 +96,7 @@ public class PlayerController : MonoBehaviour {
         switch (other.gameObject.tag) {
             case "Ladder":
                 onLadder = false;
-                rb.gravityScale = Gr;
+                rb.gravityScale = Grav;
                 break;
             case "Event":
                 dm.hideInteract();
