@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour {
     private bool onLadder;
     private bool canInteract;
     private bool ePress;
+    private bool canEPress;
     private Rigidbody2D rb;
     private DialogueManager dm;
     private Animator anim;
@@ -23,13 +24,13 @@ public class PlayerController : MonoBehaviour {
         onLadder = false;
         canInteract = false;
         ePress = false;
+        canEPress = false;
     }
 
     private void FixedUpdate() {
         if(!Pause.GetComponent<Pause>().isPaused){
             handleMovement();
         }
-        
     }
 
     /// <summary>
@@ -76,25 +77,41 @@ public class PlayerController : MonoBehaviour {
                 onLadder = true;
                 rb.gravityScale = 0;
                 break;
-            case "Event":
-                dm.showInteract();
-                break;
         }
     }
 
     private void OnTriggerStay2D(Collider2D other) {
         switch (other.gameObject.tag) {
             case "Event":
+                EventInfo info = other.GetComponent<EventInfo>();
+                if (info.type == EventInfo.Types.PassDialogue) {
+                    StartCoroutine(dm.startDialogue(info.dialogue));
+                    Destroy(other.gameObject);
+                    break;
+                }
+                if (!canEPress) {
+                    dm.showInteract();
+                    canEPress = true;
+                }
                 if (ePress) {
-                    if(other.gameObject.name == "Finally i can see something in this dark place!"){
-
-                        StartCoroutine(dm.startDialogue(other.gameObject.name));
-                        BatterySlider.SetActive(true);
-                        HopeSlider.SetActive(true);
-                        StartCoroutine(TurnOnLight());
-                        
-                    } else {
-                        StartCoroutine(dm.startDialogue(other.gameObject.name));
+                    switch(info.type) {
+                        case EventInfo.Types.Dialogue:
+                            StartCoroutine(dm.startDialogue(info.dialogue));
+                            break;
+                        case EventInfo.Types.Battery:
+                            if (!BatterySlider.activeSelf) {
+                                BatterySlider.SetActive(true);
+                                HopeSlider.SetActive(true);
+                            }
+                            StartCoroutine(dm.startDialogue(info.dialogue));
+                            BatterySlider.GetComponent<BatteryUi>().addBattery();
+                            break;
+                        case EventInfo.Types.Hope:
+                            StartCoroutine(dm.startDialogue(info.dialogue));
+                            HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmount);
+                            break;
+                        case EventInfo.Types.Mine:
+                            break;
                     }
                     Destroy(other.gameObject);
                 }
@@ -110,38 +127,8 @@ public class PlayerController : MonoBehaviour {
                 break;
             case "Event":
                 dm.hideInteract();
+                canEPress = false;
                 break;
         }
-    }
-
-    private void HandleLightRot(){
-        if(this.GetComponent<SpriteRenderer>().flipX){
-            Light.transform.eulerAngles = Vector3.forward *  90f;
-        } else {
-            Light.transform.eulerAngles = Vector3.forward * - 90f;
-        }
-    }
-    public IEnumerator TurnOnLight(){
-        HandleLightRot();
-        Light.SetActive(true);
-        yield return new WaitForSeconds(0.3f);
-        HandleLightRot();
-        Light.SetActive(false);
-        yield return new WaitForSeconds(0.5f);
-        HandleLightRot();
-        Light.SetActive(true);
-        yield return new WaitForSeconds(0.2f);
-        HandleLightRot();
-        Light.SetActive(false);
-        yield return new WaitForSeconds(0.2f);
-        HandleLightRot();
-        Light.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
-        HandleLightRot();
-        Light.SetActive(false);
-        yield return new WaitForSeconds(0.2f);
-        HandleLightRot();
-        Light.SetActive(true);
-       
     }
 }

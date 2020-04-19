@@ -131,6 +131,7 @@ GameObject:
   m_Component:
   - component: {fileID: 133211880}
   - component: {fileID: 133211881}
+  - component: {fileID: 133211882}
   m_Layer: 5
   m_Name: Hope Slider
   m_TagString: Untagged
@@ -211,6 +212,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &133211882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133211879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3f88a27559dc9847a7c60c901a6f11d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &175643085
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,12 +408,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 212351245}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32610a4c78767554789d9cb4c79e38d6, type: 3}
+  m_Script: {fileID: 11500000, guid: 1c37d851a2a6e9748a231870497ccffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Light: {fileID: 1455309993}
-  BatterySlider: {fileID: 1538673794}
-  Player: {fileID: 323839170}
+  type: 1
+  dialogue: Finally I can see something in this dark place!
+  hopeAmmount: 0
 --- !u!1 &214607612
 GameObject:
   m_ObjectHideFlags: 0
@@ -911,6 +924,7 @@ GameObject:
   m_Component:
   - component: {fileID: 451518695}
   - component: {fileID: 451518694}
+  - component: {fileID: 451518696}
   m_Layer: 0
   m_Name: I fell down...
   m_TagString: Event
@@ -958,6 +972,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &451518696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 451518693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c37d851a2a6e9748a231870497ccffb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 4
+  dialogue: I fell down...
+  hopeAmmount: 0
 --- !u!1 &460651537
 GameObject:
   m_ObjectHideFlags: 0
@@ -6777,7 +6806,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1455309994
 Transform:
   m_ObjectHideFlags: 0
@@ -6820,7 +6849,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 14
   m_PointLightOuterAngle: 47
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 11.88
+  m_PointLightOuterRadius: 0
   m_PointLightDistance: 3
   m_PointLightQuality: 1
   m_ShapeLightParametricSides: 5
@@ -6896,6 +6925,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 323839170}
+  Light: {fileID: 0}
 --- !u!1 &1467344386
 GameObject:
   m_ObjectHideFlags: 0
@@ -7248,6 +7278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5efa5c6623a4bf241a43612fdd7e7f24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Light: {fileID: 1455309993}
 --- !u!1 &1539498259
 GameObject:
   m_ObjectHideFlags: 0

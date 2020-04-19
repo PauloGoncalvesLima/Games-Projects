@@ -64,6 +64,8 @@
      <Compile Include="Assets\Scripts\Ui\Brightness Controll.cs" />
      <Compile Include="Assets\Scripts\Ui\Brightness.cs" />
      <Compile Include="Assets\Scripts\Ui\CreateLight.cs" />
+     <Compile Include="Assets\Scripts\Ui\EventInfo.cs" />
+     <Compile Include="Assets\Scripts\Ui\HopeUI.cs" />
      <Compile Include="Assets\Scripts\Ui\Pause.cs" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
