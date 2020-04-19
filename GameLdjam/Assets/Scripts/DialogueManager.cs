@@ -10,14 +10,15 @@ public class DialogueManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI interactBox;
     private string sentence;
     private bool CoroutineRunning;
+    private bool dbState;
 
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
     /// any of the Update methods is called the first time.
     /// </summary>
-    void Start()
-    {
+    private void Awake() {
         CoroutineRunning = false;
+        dbState = false;
     }
     public void showInteract() {
         interactBox.gameObject.SetActive(true);
@@ -27,13 +28,26 @@ public class DialogueManager : MonoBehaviour {
         interactBox.gameObject.SetActive(false);
     }
 
+
+    public void showDiag() {
+        dbState = true;
+        dialogueBox.gameObject.SetActive(dbState);
+    }
+
+    public void hideDiag() {
+        dbState = false;
+        dialogueBox.gameObject.SetActive(dbState);
+    }
+    public bool dbIsActive(){
+        return dbState;
+    }
+
     public IEnumerator startDialogue(string s) {
         sentence = s;
-        yield return new WaitWhile(() => CoroutineRunning == true);
+        yield return new WaitWhile(() => dbState);
+        showDiag();
         StartCoroutine(typeDialogue());
         yield return new WaitForSeconds(4f);
-        dialogueBox.text = "";
-        CoroutineRunning = false;
     }
 
     private IEnumerator typeDialogue() {
@@ -43,6 +57,8 @@ public class DialogueManager : MonoBehaviour {
             // play type writter sound
             yield return new WaitForSeconds(typingSpeed);
         }
-        
+        yield return new WaitForSeconds(2f);
+        dialogueBox.text = "";
+        hideDiag();
     }
 }

@@ -7,14 +7,13 @@ public class PlayerController : MonoBehaviour {
     public float Grav;
     public GameObject Pause;
     public GameObject Light;
-    public GameObject BatterySlider, HopeSlider, FirstBattery;
+    public GameObject BatterySlider, HopeSlider;
     private bool onLadder;
     private bool canInteract;
     private bool ePress;
     private Rigidbody2D rb;
     private DialogueManager dm;
     private Animator anim;
-    
     private void Awake() {
         // fetch components
         rb = GetComponent<Rigidbody2D>();
@@ -87,13 +86,15 @@ public class PlayerController : MonoBehaviour {
         switch (other.gameObject.tag) {
             case "Event":
                 if (ePress) {
-                    StartCoroutine(dm.startDialogue(other.gameObject.name));
-                    if(other.gameObject.name == FirstBattery.name){
+                    if(other.gameObject.name == "Finally i can see something in this dark place!"){
+
                         StartCoroutine(dm.startDialogue(other.gameObject.name));
                         BatterySlider.SetActive(true);
                         HopeSlider.SetActive(true);
                         StartCoroutine(TurnOnLight());
                         
+                    } else {
+                        StartCoroutine(dm.startDialogue(other.gameObject.name));
                     }
                     Destroy(other.gameObject);
                 }

@@ -16,7 +16,7 @@ public class BatteryUi : MonoBehaviour
         
     }
 
-    float decay(float p){
+    float LigthDecay(float p){
         return Mathf.Pow(p, (3/2));
     }
 }
