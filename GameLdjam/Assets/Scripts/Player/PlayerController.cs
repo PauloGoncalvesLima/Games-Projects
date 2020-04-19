@@ -10,11 +10,13 @@ public class PlayerController : MonoBehaviour {
     private bool ePress;
     private Rigidbody2D rb;
     private DialogueManager dm;
+    private Animator anim;
     
     private void Awake() {
         // fetch components
         rb = GetComponent<Rigidbody2D>();
         dm = GetComponentInChildren<DialogueManager>();
+        anim = GetComponent<Animator>();
         // initial properties
         onLadder = false;
         canInteract = false;
@@ -43,6 +45,16 @@ public class PlayerController : MonoBehaviour {
 
         if (onLadder) {
             vVelocity = Input.GetAxisRaw("Vertical") * speed;
+        }
+
+        // animation setup
+        anim.SetFloat("Speed",Mathf.Abs(hVelocity));
+
+        // look up
+        if (Input.GetAxisRaw("Vertical") > 0.1 && Mathf.Abs(hVelocity) < 0.1) {
+            anim.SetBool("LookUp",true);
+        } else {
+            anim.SetBool("LookUp",false);
         }
 
         rb.velocity = new Vector2(hVelocity, vVelocity);
