@@ -49,9 +49,11 @@
      <Compile Include="Assets\Scripts\Mechanics\Box.cs" />
      <Compile Include="Assets\Scripts\Player\FlashLigth.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\Ui\BatteryUi.cs" />
      <Compile Include="Assets\Scripts\Ui\Brightness Control.cs" />
      <Compile Include="Assets\Scripts\Ui\Brightness Controll.cs" />
      <Compile Include="Assets\Scripts\Ui\Brightness.cs" />
+     <Compile Include="Assets\Scripts\Ui\CreateLight.cs" />
      <Compile Include="Assets\Scripts\Ui\Pause.cs" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />

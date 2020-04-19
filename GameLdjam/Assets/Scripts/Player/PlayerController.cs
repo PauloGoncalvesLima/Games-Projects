@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour {
     public float speed = 8.5f;
     public float Grav;
     public GameObject Pause;
+    public GameObject Light;
+    public GameObject BatterySlider, HopeSlider, FirstBattery;
     private bool onLadder;
     private bool canInteract;
     private bool ePress;
@@ -86,6 +88,13 @@ public class PlayerController : MonoBehaviour {
             case "Event":
                 if (ePress) {
                     StartCoroutine(dm.startDialogue(other.gameObject.name));
+                    if(other.gameObject.name == FirstBattery.name){
+                        StartCoroutine(dm.startDialogue(other.gameObject.name));
+                        BatterySlider.SetActive(true);
+                        HopeSlider.SetActive(true);
+                        StartCoroutine(TurnOnLight());
+                        
+                    }
                     Destroy(other.gameObject);
                 }
                 break;
@@ -102,5 +111,36 @@ public class PlayerController : MonoBehaviour {
                 dm.hideInteract();
                 break;
         }
+    }
+
+    private void HandleLightRot(){
+        if(this.GetComponent<SpriteRenderer>().flipX){
+            Light.transform.eulerAngles = Vector3.forward *  90f;
+        } else {
+            Light.transform.eulerAngles = Vector3.forward * - 90f;
+        }
+    }
+    public IEnumerator TurnOnLight(){
+        HandleLightRot();
+        Light.SetActive(true);
+        yield return new WaitForSeconds(0.3f);
+        HandleLightRot();
+        Light.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
+        HandleLightRot();
+        Light.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        HandleLightRot();
+        Light.SetActive(false);
+        yield return new WaitForSeconds(0.2f);
+        HandleLightRot();
+        Light.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        HandleLightRot();
+        Light.SetActive(false);
+        yield return new WaitForSeconds(0.2f);
+        HandleLightRot();
+        Light.SetActive(true);
+       
     }
 }
