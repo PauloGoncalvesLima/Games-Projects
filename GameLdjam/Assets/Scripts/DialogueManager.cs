@@ -6,10 +6,10 @@ public class DialogueManager : MonoBehaviour {
     private float typingSpeed = 0.05f;
     
     [HeaderAttribute("TMPro")]
-    [SerializeField] public TextMeshProUGUI dialogueBox;
-    [SerializeField] public TextMeshProUGUI interactBox;
-    private string sentence;
-    private bool dbState;
+    [SerializeField] public TextMeshProUGUI dialogueBox, interactBox;
+    [SerializeField] public TextMeshProUGUI responseDBox;
+    // private string sentence;
+    private bool dbState, rState;
 
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
@@ -17,6 +17,7 @@ public class DialogueManager : MonoBehaviour {
     /// </summary>
     private void Awake() {
         dbState = false;
+        rState = false;
     }
     public void showInteract() {
         interactBox.gameObject.SetActive(true);
@@ -36,19 +37,33 @@ public class DialogueManager : MonoBehaviour {
         dbState = false;
         dialogueBox.gameObject.SetActive(dbState);
     }
+
+
+    public void showResponseDBox() {
+        rState = true;
+        responseDBox.gameObject.SetActive(rState);
+    }
+
+    public void hideResponseDBox() {
+        rState = false;
+        responseDBox.gameObject.SetActive(rState);
+    }
     public bool dbIsActive(){
         return dbState;
     }
+    public bool rStateIsActive(){
+        return rState;
+    }
 
     public IEnumerator startDialogue(string s) {
-        sentence = s;
+        // sentence = s;
         yield return new WaitWhile(() => dbState);
         showDiag();
-        StartCoroutine(typeDialogue());
+        StartCoroutine(typeDialogue(s));
         yield return new WaitForSeconds(4f);
     }
 
-    private IEnumerator typeDialogue() {
+    private IEnumerator typeDialogue(string sentence) {
         foreach (char letter in sentence.ToCharArray()) {
             dialogueBox.text += letter;
             // play type writter sound
@@ -56,6 +71,29 @@ public class DialogueManager : MonoBehaviour {
         }
         yield return new WaitForSeconds(2f);
         dialogueBox.text = "";
-        hideDiag();
+        if(dbState){
+            hideDiag();
+        }
+    }
+
+
+    private IEnumerator typeResponse(string sentence) {
+        foreach (char letter in sentence.ToCharArray()) {
+            responseDBox.text += letter;
+            // play type writter sound
+            yield return new WaitForSeconds(typingSpeed);
+        }
+        yield return new WaitForSeconds(2f);
+        responseDBox.text = "";
+        if(rState){
+            hideResponseDBox();
+        }
+    }
+
+    public IEnumerator responseDialog(string s){
+        yield return new WaitWhile(() => dbState);
+        showResponseDBox();
+        StartCoroutine(typeResponse(s));
+        yield return new WaitForSeconds(4f);
     }
 }

@@ -12,20 +12,25 @@ public class PlayerController : MonoBehaviour {
     private Collider2D EventCollider;
     private bool onLadder;
     private bool isPaused;
+    public bool ConversationIsOver;
+
     private Rigidbody2D rb;
     private DialogueManager dm;
+    private DialogueManager MinerDialog;
     private Animator anim;
     private void Awake() {
         // fetch components
         rb = GetComponent<Rigidbody2D>();
         dm = GetComponentInChildren<DialogueManager>();
+        MinerDialog = transform.GetChild(2).GetComponent<DialogueManager>();
         anim = GetComponent<Animator>();
         // initial properties
         onLadder = false;
+        ConversationIsOver = true;
     }
 
     private void FixedUpdate() {
-        if(!Pause.GetComponent<Pause>().isPaused){
+        if(!Pause.GetComponent<Pause>().isPaused && ConversationIsOver){
             handleMovement();
         }
     }
@@ -78,7 +83,13 @@ public class PlayerController : MonoBehaviour {
                     StartCoroutine(dm.startDialogue(info.dialogue));
                     Destroy(other.gameObject);
                     
-                } else {
+                } else if(info.type == EventInfo.Types.Conversation){
+                    string[] phrasesPlayer = info.ConversationPlayer;
+                    string[] phrasesResponse = info.ConversationResponse;
+                    HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmount);
+                    StartCoroutine(Conversation(phrasesPlayer, phrasesResponse, info.firstDialogIsFromPlayer, info.lastDialogIsFromPlayer));
+                    Destroy(other.gameObject.GetComponent<BoxCollider2D>());
+                }else {
                     dm.showInteract();
                     EventCollider = other;
                 }
@@ -94,6 +105,7 @@ public class PlayerController : MonoBehaviour {
                 StartCoroutine(dm.startDialogue(info.dialogue));
                 Destroy(other.gameObject);
                 break;
+
             case EventInfo.Types.Battery:
                 if (!BatterySlider.activeSelf) {
                     BatterySlider.SetActive(true);
@@ -137,5 +149,37 @@ public class PlayerController : MonoBehaviour {
                 EventCollider = null;
                 break;
         }
+    }
+
+    public IEnumerator Conversation(string[] Player, string[] Response, bool firstDialogIsFromPlayer, bool lastDialogIsFromPlayer){
+        int ConversationStage = 0;
+        ConversationIsOver = false;
+        rb.velocity = new Vector2(0, 0);
+        anim.SetFloat("Speed",0);
+        while(!ConversationIsOver){
+            // Debug.Log(Player.Length);
+            if(!firstDialogIsFromPlayer){ //Dialog starts wiht the NPC
+
+                StartCoroutine(dm.responseDialog(Response[ConversationStage]));
+                yield return new WaitForSeconds(2.2f);
+                StartCoroutine(dm.startDialogue(Player[ConversationStage]));
+                yield return new WaitForSeconds(2.2f);
+
+            } else if(firstDialogIsFromPlayer){//Dialog starts wiht the Player
+                StartCoroutine(dm.startDialogue(Player[ConversationStage]));
+                yield return new WaitForSeconds(2.2f);
+                StartCoroutine(dm.responseDialog(Response[ConversationStage]));
+                yield return new WaitForSeconds(2.2f);
+            }
+
+            if(lastDialogIsFromPlayer && Player.Length -1 == ConversationStage){
+                ConversationIsOver = true;
+            } else if(!lastDialogIsFromPlayer && Response.Length - 1 == ConversationStage){
+                ConversationIsOver = true;
+            }
+            ConversationStage++;
+        }
+        ConversationIsOver = true;
+        yield return 0;
     }
 }

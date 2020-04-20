@@ -48,9 +48,9 @@ public class FlashLigth : MonoBehaviour
         }
 
         if(hit != false){
-            Debug.Log(hit.transform.name);
+            // Debug.Log(hit.transform.name);
             if(hit.transform.tag == "LightSensor"){
-                Debug.Log("Hit Light");
+                // Debug.Log("Hit Light");
                 hit.transform.GetComponent<LightSensor>().isCharging = true;
                 hitLightSensor = true;
             }

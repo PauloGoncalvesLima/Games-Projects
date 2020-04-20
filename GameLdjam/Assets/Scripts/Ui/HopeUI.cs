@@ -21,7 +21,7 @@ public class HopeUI : MonoBehaviour
         timeOfDecay = 0.01f;
     }
     private void Update() {
-        if(Battery.GetComponent<Slider>().value == 0 && !Pause.GetComponent<Pause>().isPaused){
+        if(Battery.GetComponent<Slider>().value == 0 && !Pause.GetComponent<Pause>().isPaused && Battery.GetComponent<BatteryUi>().Player.GetComponent<PlayerController>().ConversationIsOver){
             curHope -= Time.deltaTime * timeOfDecay;
                 if(curHope < 0){
                     curHope = 0;
