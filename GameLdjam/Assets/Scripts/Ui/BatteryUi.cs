@@ -12,6 +12,7 @@ public class BatteryUi : MonoBehaviour
     public GameObject Light;
     public GameObject Player;
     public GameObject PlayerDM;
+    public AudioManager audioManager;
     private Slider slider;
     
     // Start is called before the first frame update
@@ -19,6 +20,7 @@ public class BatteryUi : MonoBehaviour
         curBattery = 0;
         slider = this.GetComponent<Slider>();
         isOn = false;
+        audioManager = FindObjectOfType<AudioManager>();
     }
 
     // Update is called once per frame
@@ -47,6 +49,7 @@ public class BatteryUi : MonoBehaviour
     void handleOnOff(float p) {
         if (isOn && p <= 0) {
             string[] phrases = new string[] {"Oh no! My headlight is out!", "Crap, it’s gonna get dark now!", "Battery is over, I don’t like this."};
+            audioManager.Play("LightOff");
             StartCoroutine(Light.GetComponent<FlashLigth>().TurnOffLight());
             if(!PlayerDM.activeSelf){
                 PlayerDM.SetActive(true);
@@ -54,6 +57,7 @@ public class BatteryUi : MonoBehaviour
             StartCoroutine(PlayerDM.GetComponent<DialogueManager>().startDialogue(phrases[Random.Range(0,phrases.Length)]));
             isOn = false;
         } else if (!isOn && p > 0) {
+            audioManager.Play("LightOn");  
             StartCoroutine(Light.GetComponent<FlashLigth>().TurnOnLight());
             isOn = true;
         }

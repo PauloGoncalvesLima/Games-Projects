@@ -5,13 +5,13 @@ public class PlayerController : MonoBehaviour {
 
     public float speed = 8.5f;
     public float Grav;
-    public float maxFallSpeeeeeed;
     public GameObject Pause;
     public GameObject Light;
     public GameObject BatterySlider, HopeSlider;
 
     private Collider2D EventCollider;
     private bool onLadder;
+    private float ladderSoundCount;
     private bool isPaused;
     public bool ConversationIsOver;
 
@@ -19,16 +19,20 @@ public class PlayerController : MonoBehaviour {
     private DialogueManager dm;
     private DialogueManager MinerDialog;
     private Animator anim;
+    private AudioManager audioManager;
+    private PlayerSound playerSound;
     private void Awake() {
         // fetch components
         rb = GetComponent<Rigidbody2D>();
         dm = GetComponentInChildren<DialogueManager>();
         MinerDialog = transform.GetChild(2).GetComponent<DialogueManager>();
         anim = GetComponent<Animator>();
+        audioManager = FindObjectOfType<AudioManager>();
+        playerSound = GetComponent<PlayerSound>();
         // initial properties
         onLadder = false;
+        ladderSoundCount = 0f;
         ConversationIsOver = true;
-        maxFallSpeeeeeed = -50f;
     }
 
     private void FixedUpdate() {
@@ -44,6 +48,14 @@ public class PlayerController : MonoBehaviour {
     {
         if(Input.GetKeyDown("e") && !Pause.GetComponent<Pause>().isPaused){
             handleEvent(EventCollider);
+        }
+
+        if(Mathf.Abs(rb.velocity.y) > 1f && onLadder) {
+            ladderSoundCount += Time.deltaTime;
+            if (ladderSoundCount > 0.3f) {
+                ladderSoundCount = 0f;
+                playerSound.LadderClimb();
+            }
         }
     }
 
@@ -64,9 +76,7 @@ public class PlayerController : MonoBehaviour {
         } else {
             anim.SetBool("LookUp",false);
         }
-        if(vVelocity < maxFallSpeeeeeed){
-            vVelocity = maxFallSpeeeeeed;
-        }
+
         rb.velocity = new Vector2(hVelocity, vVelocity);
         if(rb.velocity.x < -0.5 ){
             this.GetComponent<SpriteRenderer>().flipX = true;
@@ -106,10 +116,8 @@ public class PlayerController : MonoBehaviour {
         EventInfo info = other.GetComponent<EventInfo>();
         switch(info.type) {
             case EventInfo.Types.Dialogue:
-                StartCoroutine(dm.startDialogue(info.dialogue)); 
-                if(info.isDestructibleDialog){
-                    Destroy(other.gameObject);
-                }
+                StartCoroutine(dm.startDialogue(info.dialogue));
+                Destroy(other.gameObject);
                 break;
 
             case EventInfo.Types.Battery:
@@ -117,6 +125,7 @@ public class PlayerController : MonoBehaviour {
                     BatterySlider.SetActive(true);
                     HopeSlider.SetActive(true);
                 }
+                audioManager.Play("BatteryPick");
                 StartCoroutine(dm.startDialogue(info.dialogue));
                 BatterySlider.GetComponent<BatteryUi>().addBattery();
                 Destroy(other.gameObject);
@@ -130,6 +139,7 @@ public class PlayerController : MonoBehaviour {
                 if(this.transform.GetChild(0).gameObject.activeSelf){
                     string[] phrases = new string[] {"Uff", "Uhg", "Sigh", "Huff", "Pant"};
                     StartCoroutine(dm.startDialogue(phrases[Random.Range(0, 5)]));
+                    audioManager.Play("Mine");
                     Destroy(other.gameObject);
                 } else {
                     StartCoroutine(dm.startDialogue("Sigh... I don't have a pickaxe to break this."));

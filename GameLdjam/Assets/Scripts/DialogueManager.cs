@@ -8,6 +8,8 @@ public class DialogueManager : MonoBehaviour {
     [HeaderAttribute("TMPro")]
     [SerializeField] public TextMeshProUGUI dialogueBox, interactBox;
     [SerializeField] public TextMeshProUGUI responseDBox;
+    [HeaderAttribute("Sound Info")]
+    [SerializeField] public AudioManager audioManager;
     // private string sentence;
     private bool dbState, rState;
 
@@ -66,7 +68,7 @@ public class DialogueManager : MonoBehaviour {
     private IEnumerator typeDialogue(string sentence) {
         foreach (char letter in sentence.ToCharArray()) {
             dialogueBox.text += letter;
-            // play type writter sound
+            audioManager.Play("Speak");
             yield return new WaitForSeconds(typingSpeed);
         }
         yield return new WaitForSeconds(2f);
@@ -80,7 +82,7 @@ public class DialogueManager : MonoBehaviour {
     private IEnumerator typeResponse(string sentence) {
         foreach (char letter in sentence.ToCharArray()) {
             responseDBox.text += letter;
-            // play type writter sound
+            audioManager.Play("Response");
             yield return new WaitForSeconds(typingSpeed);
         }
         yield return new WaitForSeconds(2f);

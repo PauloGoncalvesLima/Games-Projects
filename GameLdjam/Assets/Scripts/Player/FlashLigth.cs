@@ -15,7 +15,7 @@ public class FlashLigth : MonoBehaviour
 
     private bool runningCoroutine;
     private bool hitLightSensor;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -30,75 +30,58 @@ public class FlashLigth : MonoBehaviour
 
     // Update is called once per frame
     private void Update()
-    {
-        if (playerAnim.GetBool("LookUp"))
-        {
+    {       
+        if (playerAnim.GetBool("LookUp")) {
             this.transform.eulerAngles = Vector3.forward;
             hit = handleLineCast(Vector3.up);
 
-        }
-        else if (playerSprite.flipX)
-        {
+        } else if (playerSprite.flipX) {
 
-            this.transform.eulerAngles = Vector3.forward * 90.0f;
+            this.transform.eulerAngles = Vector3.forward *  90.0f;
             hit = handleLineCast(Vector3.left);
 
-        }
-        else
-        {
+        } else {
 
             this.transform.eulerAngles = Vector3.forward * -90.0f;
             hit = handleLineCast(Vector3.right);
-
+            
         }
 
-        if (hit != false)
-        {
+        if(hit != false){
             // Debug.Log(hit.transform.name);
-            if (hit.transform.tag == "LightSensor")
-            {
+            if(hit.transform.tag == "LightSensor"){
                 // Debug.Log("Hit Light");
                 hit.transform.GetComponent<LightSensor>().isCharging = true;
                 hitLightSensor = true;
             }
-        }
-        else
-        {
+        } else {
             hitLightSensor = false;
         }
-
+       
         this.transform.position = new Vector3(Player.transform.position.x, this.transform.position.y, this.transform.position.z);
-        if (!runningCoroutine)
-        {
+        if(!runningCoroutine){
             Light.pointLightOuterRadius = power;
         }
-
+        
     }
 
-    public bool GethitLightSensor()
-    {
+    public bool GethitLightSensor(){
         return this.hitLightSensor;
     }
 
-    public void setPower(float p)
-    {
+    public void setPower(float p) {
         power = p;
     }
 
-    private void HandleLightRot()
-    {
-        if (playerSprite.flipX)
-        {
-            this.transform.eulerAngles = Vector3.forward * 90f;
-        }
-        else
-        {
-            this.transform.eulerAngles = Vector3.forward * -90f;
+    private void HandleLightRot(){
+        if(playerSprite.flipX){
+            this.transform.eulerAngles = Vector3.forward *  90f;
+        } else {
+            this.transform.eulerAngles = Vector3.forward * - 90f;
         }
     }
 
-    public IEnumerator TurnOnLight()
-    {
+    public IEnumerator TurnOnLight(){
         runningCoroutine = true;
         HandleLightRot();
         Light.pointLightOuterRadius = power;
@@ -123,8 +106,7 @@ public class FlashLigth : MonoBehaviour
         runningCoroutine = false;
     }
 
-    public IEnumerator TurnOffLight()
-    {
+    public IEnumerator TurnOffLight(){
         runningCoroutine = true;
         HandleLightRot();
         Light.pointLightOuterRadius = 0;
@@ -146,30 +128,24 @@ public class FlashLigth : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         HandleLightRot();
         Light.pointLightOuterRadius = 0;
-        power = 0;
+        power  = 0;
         runningCoroutine = false;
     }
 
-    private RaycastHit2D handleLineCast(Vector3 pos)
-    {
-
-        if (power >= 10)
-        {
-
-            Debug.DrawLine(this.transform.position, this.transform.position + pos * power / 2);
-            return Physics2D.Linecast(this.transform.position, this.transform.position + pos * power / 2, masks);
-
-        }
-        else if (power < 10 && power > 0)
-        {
+    private RaycastHit2D handleLineCast(Vector3 pos){
+        
+        if(power >= 10){
+            
+            Debug.DrawLine(this.transform.position, this.transform.position + pos * power/2);
+            return Physics2D.Linecast(this.transform.position, this.transform.position + pos * power/2, masks);
+            
+        } else if(power < 10 && power > 0){
             Debug.DrawLine(this.transform.position, this.transform.position + pos * power);
             return Physics2D.Linecast(this.transform.position, this.transform.position + pos * power, masks);
-        }
-        else
-        {
+        } else {
             Debug.DrawLine(this.transform.position, this.transform.position);
             return Physics2D.Linecast(this.transform.position, this.transform.position, masks);
         }
-
+        
     }
 }
