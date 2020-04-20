@@ -8,9 +8,12 @@ public class FlashLigth : MonoBehaviour
     public GameObject Player;
     Animator playerAnim;
     SpriteRenderer playerSprite;
+    RaycastHit2D hit;
     public UnityEngine.Experimental.Rendering.Universal.Light2D Light;
     private float power;
 
+    private bool runningCoroutine;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -18,22 +21,40 @@ public class FlashLigth : MonoBehaviour
         playerSprite = Player.GetComponent<SpriteRenderer>();
         Light = this.GetComponent<UnityEngine.Experimental.Rendering.Universal.Light2D>();
         power = 0f;
+        runningCoroutine = false;
     }
 
     // Update is called once per frame
     private void Update()
-    {   
+{       
         if (playerAnim.GetBool("LookUp")) {
             this.transform.eulerAngles = Vector3.forward;
+            hit = handleLineCast(Vector3.up);
+
         } else if (playerSprite.flipX) {
-            this.transform.eulerAngles = Vector3.forward *  90f;
+
+            this.transform.eulerAngles = Vector3.forward *  90.0f;
+            hit = handleLineCast(Vector3.left);
+
         } else {
-            this.transform.eulerAngles = Vector3.forward * - 90f;
+
+            this.transform.eulerAngles = Vector3.forward * -90.0f;
+            hit = handleLineCast(Vector3.right);
+            
         }
-        Vector3 pos = new Vector3(Player.transform.position.x, this.transform.position.y, this.transform.position.z);
-        this.transform.position = pos;
-        Light.pointLightOuterRadius = power;
+
+        if(hit != false){
+             Debug.Log(hit.transform.name);
+        }
+       
+        this.transform.position = new Vector3(Player.transform.position.x, this.transform.position.y, this.transform.position.z);
+        if(!runningCoroutine){
+            Light.pointLightOuterRadius = power;
+        }
+        
     }
+
+
 
     public void setPower(float p) {
         power = p;
@@ -48,6 +69,7 @@ public class FlashLigth : MonoBehaviour
     }
 
     public IEnumerator TurnOnLight(){
+        runningCoroutine = true;
         HandleLightRot();
         Light.pointLightOuterRadius = power;
         yield return new WaitForSeconds(0.3f);
@@ -68,9 +90,11 @@ public class FlashLigth : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         HandleLightRot();
         Light.pointLightOuterRadius = power;
+        runningCoroutine = false;
     }
 
     public IEnumerator TurnOffLight(){
+        runningCoroutine = true;
         HandleLightRot();
         Light.pointLightOuterRadius = 0;
         yield return new WaitForSeconds(0.3f);
@@ -91,5 +115,24 @@ public class FlashLigth : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         HandleLightRot();
         Light.pointLightOuterRadius = 0;
+        power  = 0;
+        runningCoroutine = false;
+    }
+
+    private RaycastHit2D handleLineCast(Vector3 pos){
+        
+        if(power >= 10){
+
+            Debug.DrawLine(this.transform.position, this.transform.position + pos * power/2);
+            return Physics2D.Linecast(this.transform.position, this.transform.position + pos * power/2);
+            
+        } else if(power < 10 && power > 0){
+            Debug.DrawLine(this.transform.position, this.transform.position + pos * power);
+            return Physics2D.Linecast(this.transform.position, this.transform.position + pos * power);
+        } else {
+            Debug.DrawLine(this.transform.position, this.transform.position);
+            return Physics2D.Linecast(this.transform.position, this.transform.position);
+        }
+        
     }
 }

@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour {
     public GameObject Light;
     public GameObject BatterySlider, HopeSlider;
     private bool onLadder;
-    private bool canInteract;
     private bool ePress;
     private bool canEPress;
     private Rigidbody2D rb;
@@ -22,7 +21,6 @@ public class PlayerController : MonoBehaviour {
         anim = GetComponent<Animator>();
         // initial properties
         onLadder = false;
-        canInteract = false;
         ePress = false;
         canEPress = false;
     }

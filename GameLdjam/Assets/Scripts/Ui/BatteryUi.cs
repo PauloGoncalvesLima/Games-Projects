@@ -13,7 +13,7 @@ public class BatteryUi : MonoBehaviour
     
     // Start is called before the first frame update
     void Awake() {
-        curBattery = 60f;
+        curBattery = 0;
         slider = this.GetComponent<Slider>();
         isOn = false;
     }
@@ -28,15 +28,21 @@ public class BatteryUi : MonoBehaviour
         }
         float percent = LigthDecay(curBattery/maxBattery);
         handleOnOff(percent);
+        // Debug.Log(percent);
+        // Debug.Log(curBattery);
+        // Debug.Log(isOn);
         slider.value = percent;
-        Light.GetComponent<FlashLigth>().setPower(LightPower(percent));
+        if(isOn){
+            Light.GetComponent<FlashLigth>().setPower(LightPower(percent));
+        }
+        
     }
 
     void handleOnOff(float p) {
         if (isOn && p <= 0) {
             StartCoroutine(Light.GetComponent<FlashLigth>().TurnOffLight());
             isOn = false;
-        } else if (!isOn && p >= 0) {
+        } else if (!isOn && p > 0) {
             StartCoroutine(Light.GetComponent<FlashLigth>().TurnOnLight());
             isOn = true;
         }

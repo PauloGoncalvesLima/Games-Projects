@@ -6,10 +6,9 @@ public class DialogueManager : MonoBehaviour {
     private float typingSpeed = 0.05f;
     
     [HeaderAttribute("TMPro")]
-    [SerializeField] private TextMeshProUGUI dialogueBox;
-    [SerializeField] private TextMeshProUGUI interactBox;
+    [SerializeField] public TextMeshProUGUI dialogueBox;
+    [SerializeField] public TextMeshProUGUI interactBox;
     private string sentence;
-    private bool CoroutineRunning;
     private bool dbState;
 
     /// <summary>
@@ -17,7 +16,6 @@ public class DialogueManager : MonoBehaviour {
     /// any of the Update methods is called the first time.
     /// </summary>
     private void Awake() {
-        CoroutineRunning = false;
         dbState = false;
     }
     public void showInteract() {
@@ -51,7 +49,6 @@ public class DialogueManager : MonoBehaviour {
     }
 
     private IEnumerator typeDialogue() {
-        CoroutineRunning = true;
         foreach (char letter in sentence.ToCharArray()) {
             dialogueBox.text += letter;
             // play type writter sound
