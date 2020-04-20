@@ -8,6 +8,7 @@ TagManager:
   - MovableBox
   - Event
   - FlashLight
+  - LightSensor
   layers:
   - Default
   - TransparentFX

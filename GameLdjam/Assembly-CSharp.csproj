@@ -46,8 +46,9 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\DialogueManager.cs" />
-     <Compile Include="Assets\Scripts\Mechanics\Box.cs" />
+     <Compile Include="Assets\Scripts\Mechanics\LightSensor.cs" />
      <Compile Include="Assets\Scripts\Player\FlashLigth.cs" />
+     <Compile Include="Assets\Scripts\Player\Pickaxe.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
      <Compile Include="Assets\Scripts\Ui\BatteryUi.cs" />
      <Compile Include="Assets\Scripts\Ui\Brightness.cs" />

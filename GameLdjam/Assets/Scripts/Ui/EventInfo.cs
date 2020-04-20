@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EventInfo : MonoBehaviour
 {
-    public enum Types {Dialogue,Battery,Hope,Mine,PassDialogue};
+    public enum Types {Dialogue,Battery,Hope,Mine,PassDialogue, Pickaxe};
     public Types type;
     [HeaderAttribute("Meta Info")]
     public string dialogue;

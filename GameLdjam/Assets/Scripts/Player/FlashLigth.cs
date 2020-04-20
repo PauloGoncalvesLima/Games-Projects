@@ -13,6 +13,7 @@ public class FlashLigth : MonoBehaviour
     private float power;
 
     private bool runningCoroutine;
+    private bool hitLightSensor;
     
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,7 @@ public class FlashLigth : MonoBehaviour
         Light = this.GetComponent<UnityEngine.Experimental.Rendering.Universal.Light2D>();
         power = 0f;
         runningCoroutine = false;
+        hitLightSensor = false;
     }
 
     // Update is called once per frame
@@ -45,6 +47,13 @@ public class FlashLigth : MonoBehaviour
 
         if(hit != false){
              Debug.Log(hit.transform.name);
+             if(hit.transform.tag == "LightSensor"){
+                 Debug.Log("Hit Light");
+                 hit.transform.GetComponent<LightSensor>().isCharging = true;
+                 hitLightSensor = true;
+             }
+        } else {
+            hitLightSensor = false;
         }
        
         this.transform.position = new Vector3(Player.transform.position.x, this.transform.position.y, this.transform.position.z);
@@ -54,7 +63,9 @@ public class FlashLigth : MonoBehaviour
         
     }
 
-
+    public bool GethitLightSensor(){
+        return this.hitLightSensor;
+    }
 
     public void setPower(float p) {
         power = p;

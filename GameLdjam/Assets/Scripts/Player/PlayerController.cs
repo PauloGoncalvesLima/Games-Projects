@@ -110,6 +110,11 @@ public class PlayerController : MonoBehaviour {
                             break;
                         case EventInfo.Types.Mine:
                             break;
+                        case EventInfo.Types.Pickaxe:
+                            this.transform.Find("Pickaxe").gameObject.SetActive(true);
+                            StartCoroutine(dm.startDialogue(info.dialogue));
+                            HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmount);
+                            break;
                     }
                     Destroy(other.gameObject);
                 }
