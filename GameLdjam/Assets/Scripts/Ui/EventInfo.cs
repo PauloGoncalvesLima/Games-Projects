@@ -11,6 +11,7 @@ public class EventInfo : MonoBehaviour
     public int hopeAmmount;
     public string[] ConversationPlayer;
     public string[] ConversationResponse;
+    public bool isDestructibleDialog;
     public bool lastDialogIsFromPlayer;
     public bool firstDialogIsFromPlayer;
 }

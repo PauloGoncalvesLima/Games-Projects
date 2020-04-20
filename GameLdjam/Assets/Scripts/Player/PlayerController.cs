@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour {
 
     public float speed = 8.5f;
     public float Grav;
+    public float maxFallSpeeeeeed;
     public GameObject Pause;
     public GameObject Light;
     public GameObject BatterySlider, HopeSlider;
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour {
         // initial properties
         onLadder = false;
         ConversationIsOver = true;
+        maxFallSpeeeeeed = -50f;
     }
 
     private void FixedUpdate() {
@@ -62,7 +64,9 @@ public class PlayerController : MonoBehaviour {
         } else {
             anim.SetBool("LookUp",false);
         }
-
+        if(vVelocity < maxFallSpeeeeeed){
+            vVelocity = maxFallSpeeeeeed;
+        }
         rb.velocity = new Vector2(hVelocity, vVelocity);
         if(rb.velocity.x < -0.5 ){
             this.GetComponent<SpriteRenderer>().flipX = true;
@@ -102,8 +106,10 @@ public class PlayerController : MonoBehaviour {
         EventInfo info = other.GetComponent<EventInfo>();
         switch(info.type) {
             case EventInfo.Types.Dialogue:
-                StartCoroutine(dm.startDialogue(info.dialogue));
-                Destroy(other.gameObject);
+                StartCoroutine(dm.startDialogue(info.dialogue)); 
+                if(info.isDestructibleDialog){
+                    Destroy(other.gameObject);
+                }
                 break;
 
             case EventInfo.Types.Battery:
