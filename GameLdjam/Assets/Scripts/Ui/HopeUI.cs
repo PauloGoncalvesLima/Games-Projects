@@ -5,23 +5,42 @@ using UnityEngine.UI;
 
 public class HopeUI : MonoBehaviour
 {
-    int curHope;
-    int maxHope = 10;
+    float curHope;
+    float maxHope = 10f;
+    public float timeOfDecay;
     private Slider slider;
+    public GameObject Pause;
+    public GameObject Battery;
+    public bool isDead;
     
     // Start is called before the first frame update
     void Start()
     {
-        curHope = 2;
+        curHope = 2f;
         slider = this.GetComponent<Slider>();
+        timeOfDecay = 0.01f;
+    }
+    private void Update() {
+        if(Battery.GetComponent<Slider>().value == 0 && !Pause.GetComponent<Pause>().isPaused){
+            curHope -= Time.deltaTime * timeOfDecay;
+                if(curHope < 0){
+                    curHope = 0;
+                    isDead = false;
+                }
+            curHope = hopeDecay(curHope / maxHope);
+            updateSlider();
+        }
     }
 
     void updateSlider() {
-        slider.value = (float) curHope/ (float) maxHope;
+        slider.value = curHope / maxHope;
     }
 
-    public int getHope() {
+    public float getHope() {
         return curHope;
+    }
+    float hopeDecay(float p) {
+        return Mathf.Pow(p, (3/2)) * 10;
     }
 
     public void addHope(int h) {

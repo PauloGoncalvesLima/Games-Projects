@@ -9,6 +9,7 @@ TagManager:
   - Event
   - FlashLight
   - LightSensor
+  - Breakable
   layers:
   - Default
   - TransparentFX

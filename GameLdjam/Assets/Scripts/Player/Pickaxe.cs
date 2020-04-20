@@ -16,32 +16,35 @@ public class Pickaxe : MonoBehaviour
     void Start()
     {
         flipXState = false;
-        bobRate = 0.001f;
+        bobRate = 0.0145f;
         changeState = 1f;
     }
-    // Update is called once per frame-0.28I M-0.3 -0.4F
-    void Update()
-    {
+    private void FixedUpdate() {
         
-        flipXState = Player.GetComponent<SpriteRenderer>().flipX;
         if(Mathf.Abs(Player.GetComponent<Rigidbody2D>().velocity.x) > 0.1){
-            this.transform.localPosition = new Vector3 (this.transform.localPosition.x, this.transform.localPosition.y + bobRate * Time.deltaTime, 0);
-            if(this.transform.localPosition.y > -0.2f || this.transform.localPosition.y < -0.4f){
+            this.transform.localPosition = new Vector3 (this.transform.localPosition.x, this.transform.localPosition.y + bobRate, 0);
+            if(this.transform.localPosition.y > 0.24f || this.transform.localPosition.y < 0.09f){
                 bobRate = bobRate * -1;
             } 
 
         } else {
-            this.transform.localPosition = new Vector3(this.transform.localPosition.x, -0.3f, 0); 
+            this.transform.localPosition = new Vector3(this.transform.localPosition.x, 0.24f, 0); 
         }
-        if(!flipXState){
-            this.transform.GetComponent<SpriteRenderer>().flipX = flipXState;
-            this.transform.GetComponent<SpriteRenderer>().sortingOrder = 65;
-            this.transform.localPosition = new Vector3(0, this.transform.localPosition.y, 0); 
+    }
 
+    // Update is called once per frame0.24I M-0.3 F
+    void Update()
+    {
+        flipXState = Player.GetComponent<SpriteRenderer>().flipX;
+        
+        if(flipXState){
+            this.transform.GetComponent<SpriteRenderer>().flipX = flipXState;
+            this.transform.localPosition = new Vector3(0.5f, this.transform.localPosition.y, 0); 
+            this.transform.localRotation =new Quaternion (this.transform.localRotation.x, 24, this.transform.localRotation.z, this.transform.localRotation.w);
         } else {
             this.transform.GetComponent<SpriteRenderer>().flipX = flipXState;
-            this.transform.GetComponent<SpriteRenderer>().sortingOrder = 35;
-            this.transform.localPosition = new Vector3(-0.36f, this.transform.localPosition.y, 0); 
+            this.transform.localPosition = new Vector3(-0.5f, this.transform.localPosition.y, 0);
+            this.transform.localRotation =new Quaternion (this.transform.localRotation.x, 66, this.transform.localRotation.z, this.transform.localRotation.w);
         }
             
     }

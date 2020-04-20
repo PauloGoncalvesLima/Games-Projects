@@ -28,7 +28,7 @@ public class FlashLigth : MonoBehaviour
 
     // Update is called once per frame
     private void Update()
-{       
+    {       
         if (playerAnim.GetBool("LookUp")) {
             this.transform.eulerAngles = Vector3.forward;
             hit = handleLineCast(Vector3.up);
@@ -46,9 +46,9 @@ public class FlashLigth : MonoBehaviour
         }
 
         if(hit != false){
-             Debug.Log(hit.transform.name);
+            //  Debug.Log(hit.transform.name);
              if(hit.transform.tag == "LightSensor"){
-                 Debug.Log("Hit Light");
+                //  Debug.Log("Hit Light");
                  hit.transform.GetComponent<LightSensor>().isCharging = true;
                  hitLightSensor = true;
              }

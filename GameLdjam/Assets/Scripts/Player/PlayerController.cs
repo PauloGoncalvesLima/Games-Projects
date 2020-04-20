@@ -8,9 +8,10 @@ public class PlayerController : MonoBehaviour {
     public GameObject Pause;
     public GameObject Light;
     public GameObject BatterySlider, HopeSlider;
+
+    private Collider2D EventCollider;
     private bool onLadder;
-    private bool ePress;
-    private bool canEPress;
+    private bool isPaused;
     private Rigidbody2D rb;
     private DialogueManager dm;
     private Animator anim;
@@ -21,8 +22,6 @@ public class PlayerController : MonoBehaviour {
         anim = GetComponent<Animator>();
         // initial properties
         onLadder = false;
-        ePress = false;
-        canEPress = false;
     }
 
     private void FixedUpdate() {
@@ -36,10 +35,8 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     void Update()
     {
-        if(Input.GetKeyDown("e")){
-            ePress = true;
-        } else if (Input.GetKeyUp("e")){
-            ePress = false;
+        if(Input.GetKeyDown("e") && !Pause.GetComponent<Pause>().isPaused){
+            handleEvent(EventCollider);
         }
     }
 
@@ -75,49 +72,56 @@ public class PlayerController : MonoBehaviour {
                 onLadder = true;
                 rb.gravityScale = 0;
                 break;
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D other) {
-        switch (other.gameObject.tag) {
             case "Event":
                 EventInfo info = other.GetComponent<EventInfo>();
                 if (info.type == EventInfo.Types.PassDialogue) {
                     StartCoroutine(dm.startDialogue(info.dialogue));
                     Destroy(other.gameObject);
-                    break;
-                }
-                if (!canEPress) {
+                    
+                } else {
                     dm.showInteract();
-                    canEPress = true;
+                    EventCollider = other;
                 }
-                if (ePress) {
-                    switch(info.type) {
-                        case EventInfo.Types.Dialogue:
-                            StartCoroutine(dm.startDialogue(info.dialogue));
-                            break;
-                        case EventInfo.Types.Battery:
-                            if (!BatterySlider.activeSelf) {
-                                BatterySlider.SetActive(true);
-                                HopeSlider.SetActive(true);
-                            }
-                            StartCoroutine(dm.startDialogue(info.dialogue));
-                            BatterySlider.GetComponent<BatteryUi>().addBattery();
-                            break;
-                        case EventInfo.Types.Hope:
-                            StartCoroutine(dm.startDialogue(info.dialogue));
-                            HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmount);
-                            break;
-                        case EventInfo.Types.Mine:
-                            break;
-                        case EventInfo.Types.Pickaxe:
-                            this.transform.Find("Pickaxe").gameObject.SetActive(true);
-                            StartCoroutine(dm.startDialogue(info.dialogue));
-                            HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmount);
-                            break;
-                    }
+                
+                break;
+        }
+    }
+
+    private void handleEvent(Collider2D other) {
+        EventInfo info = other.GetComponent<EventInfo>();
+        switch(info.type) {
+            case EventInfo.Types.Dialogue:
+                StartCoroutine(dm.startDialogue(info.dialogue));
+                Destroy(other.gameObject);
+                break;
+            case EventInfo.Types.Battery:
+                if (!BatterySlider.activeSelf) {
+                    BatterySlider.SetActive(true);
+                    HopeSlider.SetActive(true);
+                }
+                StartCoroutine(dm.startDialogue(info.dialogue));
+                BatterySlider.GetComponent<BatteryUi>().addBattery();
+                Destroy(other.gameObject);
+                break;
+            case EventInfo.Types.Hope:
+                StartCoroutine(dm.startDialogue(info.dialogue));
+                HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmount);
+                Destroy(other.gameObject);
+                break;
+            case EventInfo.Types.Mine:
+                if(this.transform.GetChild(0).gameObject.activeSelf){
+                    string[] phrases = new string[] {"Uff", "Uhg", "Sigh", "Huff", "Pant"};
+                    StartCoroutine(dm.startDialogue(phrases[Random.Range(0, 5)]));
                     Destroy(other.gameObject);
+                } else {
+                    StartCoroutine(dm.startDialogue("Sigh... I don't have a pickaxe to break this."));
                 }
+                break;
+            case EventInfo.Types.Pickaxe:
+                this.transform.Find("Pickaxe").gameObject.SetActive(true);
+                StartCoroutine(dm.startDialogue(info.dialogue));
+                HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmount);
+                Destroy(other.gameObject);
                 break;
         }
     }
@@ -130,7 +134,7 @@ public class PlayerController : MonoBehaviour {
                 break;
             case "Event":
                 dm.hideInteract();
-                canEPress = false;
+                EventCollider = null;
                 break;
         }
     }

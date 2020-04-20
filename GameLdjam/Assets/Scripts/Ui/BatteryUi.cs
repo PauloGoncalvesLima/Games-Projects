@@ -8,6 +8,7 @@ public class BatteryUi : MonoBehaviour
     float curBattery;
     float maxBattery = 120f;
     bool isOn;
+    public GameObject Pause;
     public GameObject Light;
     private Slider slider;
     
@@ -21,26 +22,30 @@ public class BatteryUi : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // tick battery
-        curBattery -= Time.deltaTime;
-        if (curBattery < 0) {
-            curBattery = 0;
+        if(!Pause.GetComponent<Pause>().isPaused){
+            // tick battery
+            curBattery -= Time.deltaTime;
+            if (curBattery < 0) {
+                curBattery = 0;
+            }
+            float percent = LigthDecay(curBattery/maxBattery);
+            handleOnOff(percent);
+            // Debug.Log(percent);
+            // Debug.Log(curBattery);
+            // Debug.Log(isOn);
+            slider.value = percent;
+            if(isOn){
+                Light.GetComponent<FlashLigth>().setPower(LightPower(percent));
+            }
         }
-        float percent = LigthDecay(curBattery/maxBattery);
-        handleOnOff(percent);
-        // Debug.Log(percent);
-        // Debug.Log(curBattery);
-        // Debug.Log(isOn);
-        slider.value = percent;
-        if(isOn){
-            Light.GetComponent<FlashLigth>().setPower(LightPower(percent));
-        }
+        
         
     }
 
     void handleOnOff(float p) {
         if (isOn && p <= 0) {
             StartCoroutine(Light.GetComponent<FlashLigth>().TurnOffLight());
+            // TODO StartCoroutine()
             isOn = false;
         } else if (!isOn && p > 0) {
             StartCoroutine(Light.GetComponent<FlashLigth>().TurnOnLight());

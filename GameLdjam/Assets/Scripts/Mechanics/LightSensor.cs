@@ -8,6 +8,7 @@ public class LightSensor : MonoBehaviour
     float currTimeOfPower;
     public bool isCharging, hasPower;
     public GameObject mask;
+    public GameObject Pause;
     public GameObject Door;
     public GameObject Light;
     public Sprite OpenDoor;
@@ -25,32 +26,35 @@ public class LightSensor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!Light.GetComponent<FlashLigth>().GethitLightSensor()){
-            Debug.Log(Light.GetComponent<FlashLigth>().GethitLightSensor());
+        if(!Pause.GetComponent<Pause>().isPaused){
+            if(!Light.GetComponent<FlashLigth>().GethitLightSensor()){
+            // Debug.Log(Light.GetComponent<FlashLigth>().GethitLightSensor());
             isCharging = false;
-        }
-        if(!isCharging){
-            currTimeOfPower -= Time.deltaTime;
-            if(currTimeOfPower < 0){
-                currTimeOfPower = 0;
             }
-        } else {
-            currTimeOfPower += Time.deltaTime;
-            if(currTimeOfPower > totalTimeOfPower){
-                currTimeOfPower = totalTimeOfPower;
+            if(!isCharging){
+                currTimeOfPower -= Time.deltaTime;
+                if(currTimeOfPower < 0){
+                    currTimeOfPower = 0;
+                }
+            } else {
+                currTimeOfPower += Time.deltaTime;
+                if(currTimeOfPower > totalTimeOfPower){
+                    currTimeOfPower = totalTimeOfPower;
+                }
             }
-        }
 
-        if(currTimeOfPower > 0) {
-            Door.GetComponent<BoxCollider2D>().isTrigger = true;//Open door
-            Door.GetComponent<SpriteRenderer>().sprite = OpenDoor;
-        } else { 
-            Door.GetComponent<BoxCollider2D>().isTrigger = false; //Close door
-            Door.GetComponent<SpriteRenderer>().sprite = CloseDoor;
+            if(currTimeOfPower > 0) {
+                Door.GetComponent<BoxCollider2D>().isTrigger = true;//Open door
+                Door.GetComponent<SpriteRenderer>().sprite = OpenDoor;
+            } else { 
+                Door.GetComponent<BoxCollider2D>().isTrigger = false; //Close door
+                Door.GetComponent<SpriteRenderer>().sprite = CloseDoor;
+            }
+            
+            mask.transform.localScale = new Vector3(mask.transform.localScale.x, power(currTimeOfPower/totalTimeOfPower), mask.transform.localScale.z);
+            // Debug.Log(isCharging);
         }
         
-        mask.transform.localScale = new Vector3(mask.transform.localScale.x, power(currTimeOfPower/totalTimeOfPower), mask.transform.localScale.z);
-        Debug.Log(isCharging);
     }
 
 
