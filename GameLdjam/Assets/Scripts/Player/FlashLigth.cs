@@ -10,6 +10,7 @@ public class FlashLigth : MonoBehaviour
     SpriteRenderer playerSprite;
     RaycastHit2D hit;
     public UnityEngine.Experimental.Rendering.Universal.Light2D Light;
+    LayerMask masks;
     private float power;
 
     private bool runningCoroutine;
@@ -24,6 +25,7 @@ public class FlashLigth : MonoBehaviour
         power = 0f;
         runningCoroutine = false;
         hitLightSensor = false;
+        masks = LayerMask.GetMask("Light Sensors", "Default");
     }
 
     // Update is called once per frame
@@ -46,12 +48,12 @@ public class FlashLigth : MonoBehaviour
         }
 
         if(hit != false){
-            //  Debug.Log(hit.transform.name);
-             if(hit.transform.tag == "LightSensor"){
-                //  Debug.Log("Hit Light");
-                 hit.transform.GetComponent<LightSensor>().isCharging = true;
-                 hitLightSensor = true;
-             }
+            Debug.Log(hit.transform.name);
+            if(hit.transform.tag == "LightSensor"){
+                Debug.Log("Hit Light");
+                hit.transform.GetComponent<LightSensor>().isCharging = true;
+                hitLightSensor = true;
+            }
         } else {
             hitLightSensor = false;
         }
@@ -133,16 +135,16 @@ public class FlashLigth : MonoBehaviour
     private RaycastHit2D handleLineCast(Vector3 pos){
         
         if(power >= 10){
-
+            
             Debug.DrawLine(this.transform.position, this.transform.position + pos * power/2);
-            return Physics2D.Linecast(this.transform.position, this.transform.position + pos * power/2);
+            return Physics2D.Linecast(this.transform.position, this.transform.position + pos * power/2, masks);
             
         } else if(power < 10 && power > 0){
             Debug.DrawLine(this.transform.position, this.transform.position + pos * power);
-            return Physics2D.Linecast(this.transform.position, this.transform.position + pos * power);
+            return Physics2D.Linecast(this.transform.position, this.transform.position + pos * power, masks);
         } else {
             Debug.DrawLine(this.transform.position, this.transform.position);
-            return Physics2D.Linecast(this.transform.position, this.transform.position);
+            return Physics2D.Linecast(this.transform.position, this.transform.position, masks);
         }
         
     }
