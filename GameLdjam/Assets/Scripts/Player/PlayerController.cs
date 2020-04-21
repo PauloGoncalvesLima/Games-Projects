@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour {
     public GameObject Light;
     public GameObject BatterySlider, HopeSlider;
 
+    private bool clock,lunchbox,helmet;
+
     private Collider2D EventCollider;
     private bool onLadder;
     private float ladderSoundCount;
@@ -33,6 +35,9 @@ public class PlayerController : MonoBehaviour {
         onLadder = false;
         ladderSoundCount = 0f;
         ConversationIsOver = true;
+        clock = false;
+        helmet = false;
+        lunchbox = false;
     }
 
     private void FixedUpdate() {
@@ -94,13 +99,34 @@ public class PlayerController : MonoBehaviour {
             case "Event":
                 EventInfo info = other.GetComponent<EventInfo>();
                 if (info.type == EventInfo.Types.PassDialogue) {
-                    StartCoroutine(dm.startDialogue(info.dialogue));
-                    Destroy(other.gameObject);
-                    
+                    if (info.dialogue == "Where  am   I???? " || info.dialogue == "Outch my leg......") {
+                        StartCoroutine(dm.startDialogue(info.dialogue));
+                        Destroy(other.gameObject);
+                    } else if (info.boolToSet == "Helmet" && helmet) {
+                        StartCoroutine(dm.startDialogue(info.dialogueAlternative));
+                        HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmountAlternative);
+                        Destroy(other.gameObject);
+                    } else {
+                        StartCoroutine(dm.startDialogue(info.dialogue));
+                        HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmount);
+                        Destroy(other.gameObject);
+                    }
+
                 } else if(info.type == EventInfo.Types.Conversation){
-                    string[] phrasesPlayer = info.ConversationPlayer;
-                    string[] phrasesResponse = info.ConversationResponse;
-                    HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmount);
+                    string[] phrasesPlayer = new string[] {"Are you the owner of this lunchbox? You seem familiar.",
+                                                           "Richard? It’s the same name of my best friend.",
+                                                           "Annie?! That sounds like someone i know."};
+                    string[] phrasesResponse = new string[] {"So you bring any food to the good old Richard?.",
+                                                             "That’s me i hope, hehe... Go on, Annie needs her...",
+                                                             "I need to rest a bit..."};
+                    if (!lunchbox) {
+                        phrasesPlayer = info.ConversationPlayer;
+                        phrasesResponse = info.ConversationResponse;
+                        HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmount);
+                    } else {
+                        HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmountAlternative);
+                    }
+                    
                     StartCoroutine(Conversation(phrasesPlayer, phrasesResponse, info.firstDialogIsFromPlayer, info.lastDialogIsFromPlayer));
                     Destroy(other.gameObject.GetComponent<BoxCollider2D>());
                 }else {
@@ -115,9 +141,34 @@ public class PlayerController : MonoBehaviour {
     private void handleEvent(Collider2D other) {
         EventInfo info = other.GetComponent<EventInfo>();
         switch(info.type) {
+            case EventInfo.Types.ChangeableDialogue:
+                if ((info.boolToSet == "Lunchbox" && lunchbox) ||
+                    (info.boolToSet == "Clock" && clock) ||
+                    (info.boolToSet == "Helmet" && helmet)) {
+                    StartCoroutine(dm.startDialogue(info.dialogueAlternative));
+                    HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmountAlternative);
+                } else {
+                    StartCoroutine(dm.startDialogue(info.dialogue));
+                    HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmount);
+                }
+                if(info.isDestructibleDialog){
+                    Destroy(other.gameObject);
+                }
+                break;
+
             case EventInfo.Types.Dialogue:
                 StartCoroutine(dm.startDialogue(info.dialogue));
-                Destroy(other.gameObject);
+                if (info.boolToSet == "Lunchbox") {
+                    lunchbox = true;
+                } else if (info.boolToSet == "Clock") {
+                    clock = true;
+                } if (info.boolToSet == "Helmet") {
+                    helmet = true;
+                }
+                HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmount);
+                if(info.isDestructibleDialog){
+                    Destroy(other.gameObject);
+                }
                 break;
 
             case EventInfo.Types.Battery:
@@ -177,15 +228,15 @@ public class PlayerController : MonoBehaviour {
             if(!firstDialogIsFromPlayer){ //Dialog starts wiht the NPC
 
                 StartCoroutine(dm.responseDialog(Response[ConversationStage]));
-                yield return new WaitForSeconds(2.2f);
+                yield return new WaitForSeconds(5.2f);
                 StartCoroutine(dm.startDialogue(Player[ConversationStage]));
-                yield return new WaitForSeconds(2.2f);
+                yield return new WaitForSeconds(5.2f);
 
             } else if(firstDialogIsFromPlayer){//Dialog starts wiht the Player
                 StartCoroutine(dm.startDialogue(Player[ConversationStage]));
-                yield return new WaitForSeconds(2.2f);
+                yield return new WaitForSeconds(5.2f);
                 StartCoroutine(dm.responseDialog(Response[ConversationStage]));
-                yield return new WaitForSeconds(2.2f);
+                yield return new WaitForSeconds(5.2f);
             }
 
             if(lastDialogIsFromPlayer && Player.Length -1 == ConversationStage){
@@ -195,6 +246,7 @@ public class PlayerController : MonoBehaviour {
             }
             ConversationStage++;
         }
+        FindObjectOfType<RichardController>().faint();
         ConversationIsOver = true;
         yield return 0;
     }

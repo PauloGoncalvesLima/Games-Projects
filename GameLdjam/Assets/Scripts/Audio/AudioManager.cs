@@ -30,7 +30,7 @@ public class AudioManager : MonoBehaviour {
 
     // Use to play soundtrack
     private void Start() {
-        // this.Play("Soundtrack");
+        this.Play("Soundtrack");
     }
 
     // outside usage: FindObjectOfType<AudioManager>().Play("name")
