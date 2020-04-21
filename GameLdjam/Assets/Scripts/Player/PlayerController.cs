@@ -139,6 +139,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void handleEvent(Collider2D other) {
+        if (other == null) {
+            return;
+        }
         EventInfo info = other.GetComponent<EventInfo>();
         switch(info.type) {
             case EventInfo.Types.ChangeableDialogue:
@@ -165,7 +168,9 @@ public class PlayerController : MonoBehaviour {
                 } if (info.boolToSet == "Helmet") {
                     helmet = true;
                 }
-                HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmount);
+                if (info.dialogue != "What machine is this??") {
+                    HopeSlider.GetComponent<HopeUI>().addHope(info.hopeAmmount);
+                }
                 if(info.isDestructibleDialog){
                     Destroy(other.gameObject);
                 }
