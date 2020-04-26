@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour {
 
     public float speed = 8.5f;
     public float Grav;
+    public float maxFallSpeed = -32f;
     public GameObject Pause;
     public GameObject Light;
     public GameObject BatterySlider, HopeSlider;
@@ -61,6 +62,10 @@ public class PlayerController : MonoBehaviour {
                 ladderSoundCount = 0f;
                 playerSound.LadderClimb();
             }
+        }
+
+        if (rb.velocity.y < maxFallSpeed) {
+            rb.velocity = new Vector2(rb.velocity.x, maxFallSpeed);
         }
     }
 
