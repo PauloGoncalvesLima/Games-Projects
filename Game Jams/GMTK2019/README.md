@@ -1,6 +1,6 @@
 # Sole Spotlight
 
-A game made for the 2019 edition of the annual game jam [GMTK](https://gmtk.itch.io/). The theme for the [GMTK2019](https://itch.io/jam/gmtk-2019) was *"Only one"*.
+A game made for the 2019 edition of the annual game jam [GMTK](https://gmtk.itch.io/). The theme for the [GMTK2019](https://itch.io/jam/gmtk-2019) jam was *"Only one"*.
 
 ## Demo
 
@@ -12,7 +12,7 @@ You can play the by accessing this link: [Sole Spotlight](https://vawer.itch.io/
 
 ## Jam Results
 
-For the final rankings, Sole Spotlight placed at 270th of 2604 entries, with an overall score of 4.027 out of 5. More detailed results can seen in the following image:
+For the final rankings, Sole Spotlight placed at 270th of 2604 entries, with an overall score of 4.027 out of 5. More detailed results can be seen in the following image:
 
 ![Sole Spotlight Rank](./Press/Rank.png)
 
