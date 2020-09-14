@@ -8,11 +8,11 @@ The room is completely dark and there is Only One Spotlight to illuminate it. Us
 
 ![Cover Sole Spotlight](./Press/Demo.png)
 
-You can play the by accessing this link: [Sole Spotlight](https://vawer.itch.io/sole-spotlight).
+You can play the game by accessing this link: [Sole Spotlight](https://vawer.itch.io/sole-spotlight).
 
 ## Jam Results
 
-For the final rankings, Sole Spotlight placed at 270th of 2604 entries, with an overall score of 4.027 out of 5. More detailed results can be seen in the following image:
+For the final rankings, Sole Spotlight placed at 270th out of 2604 entries, with an overall score of 4.027 out of 5. More detailed results can be seen in the following image:
 
 ![Sole Spotlight Rank](./Press/Rank.png)
 
