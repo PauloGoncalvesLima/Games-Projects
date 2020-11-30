@@ -18,8 +18,7 @@ You can play the game by accessing this link: [Keep Hope Alive](https://vawer.it
 
 ## Jam Results
 
-At the time of writing, the LDJ site is undergoing maintenance.
-TODO: Get the final results.
+![LDJ46 Results](./Press/Results.png) 
 
 ## Accessing Source Code
 
